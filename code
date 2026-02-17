@@ -1,0 +1,37 @@
+#define buzzerPin 7
+const int MQ2_AOUT_PIN = A0;
+const int threshold = 600;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buzzerPin, OUTPUT);
+
+  Serial.println("System Ready: Sound alert only");
+  delay(2000);
+}
+
+void loop() {
+  int sensorValue = analogRead(MQ2_AOUT_PIN);
+  float voltage = sensorValue * (5.0 / 1023.0);
+
+  Serial.print("Sensor Value: ");
+  Serial.print(sensorValue);
+  Serial.print(" | ");
+  Serial.print(voltage);
+  Serial.println(" V");
+
+  if (sensorValue > threshold) {
+    // --- สภาวะอันตราย ---
+    digitalWrite(buzzerPin, HIGH);
+    delay(200);
+    digitalWrite(buzzerPin, LOW);
+    delay(200);
+
+    Serial.println("!!! DANGER !!!");
+  } 
+  else {
+    // --- สภาวะปกติ ---
+    digitalWrite(buzzerPin, LOW);
+    delay(500);
+  }
+}
